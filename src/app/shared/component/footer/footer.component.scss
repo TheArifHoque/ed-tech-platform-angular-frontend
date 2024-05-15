@@ -1,0 +1,54 @@
+@import "../../../../styles.scss";
+
+footer {
+    min-height: 50px;
+    padding: 12px 16px;
+    background: $primary;
+    color: $white;
+
+    .wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 24px;
+
+        .branding {
+            display: flex;
+            flex-direction: row;
+            column-gap: 24px;
+
+            i {
+                font-size: 22px;
+            }
+
+            p {
+                font-size: 20px;
+            }
+        }
+
+        .icons {
+            display: flex;
+            flex-direction: row;
+            column-gap: 24px;
+
+            a {
+                columns: $white;
+                font-size: 22px;
+
+                &:hover {
+                    color: &accent-1;
+                }
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            row-gap: 20px;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        padding: 32px 16px;
+    }
+}
