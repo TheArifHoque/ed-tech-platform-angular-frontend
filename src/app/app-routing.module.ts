@@ -12,6 +12,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./general/general.module').then((module) => module.GeneralModule),
   },
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin/admin.module').then((module) => module.AdminModule)
+  },
+  {
+    path: "**",
+    redirectTo: 'general',
+    pathMatch: 'full'
+  }
 ];
 
 @NgModule({
