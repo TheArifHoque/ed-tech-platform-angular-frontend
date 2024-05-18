@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
 import { MenuItem } from '../../model/menu-item';
+import { BackendApiService } from '../../service/backend-api.service';
+import { Observable, map } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,6 +14,7 @@ export class SidebarComponent implements OnInit {
   isLoggedIn: boolean;
   showSidebar: boolean;
   isAdmin: boolean;
+  userImage: any;
 
   userMenu: MenuItem[] = [
     { label: 'Home', route: '/' },
@@ -27,7 +31,10 @@ export class SidebarComponent implements OnInit {
     { label: 'Statistics', route: '/admin/statistics' },
   ]
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService, 
+    private backendApiService: BackendApiService, 
+    private sanitizer: DomSanitizer) {
     this.isLoggedIn = false;
     this.showSidebar = false;
     this.isAdmin = false;
@@ -42,9 +49,36 @@ export class SidebarComponent implements OnInit {
       this.isLoggedIn = loggedInStatus;
       if (this.isLoggedIn) {
         this.isAdmin = this.authService.isAdmin();
-        // this.loadProfileData();
+        this.loadProfileData();
       }
     })
+  }
+
+  loadProfileData(): void {
+    this.backendApiService
+    .callGetUserDataAPI(this.authService.getUserId())
+    .subscribe({
+      next: (response) => {
+        const userData = response?.responseBody?.user || [];
+        this.loadImage(userData.imageUrl);
+      },
+      error: (error) => console.error(error),
+    });
+  }
+
+  loadImage(imageUrl: string): void {
+    this.getImage(imageUrl).subscribe({
+      next: (image) => {
+        this.userImage = this.sanitizer.bypassSecurityTrustUrl(image);
+      },
+      error: (error) => console.error(error),
+    });
+  }
+
+  getImage(imageUrl: string): Observable<string> {
+    return this.backendApiService
+    .callGetContentAPI(imageUrl)
+    .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
   }
 
   getUserName(): string {
