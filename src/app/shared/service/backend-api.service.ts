@@ -19,4 +19,8 @@ export class BackendApiService {
             responseType: 'arraybuffer',
         });
     }
+
+    callHomePageAPI(): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/home-page-api`);
+    }
 }

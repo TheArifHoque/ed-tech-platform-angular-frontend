@@ -1,1 +1,105 @@
-<p>home-page works!</p>
+<div class="top-banner-section">
+    <div class="section">
+        <div class="grid-wrapper">
+            <div class="left-div">
+                <p class="top-line">Learning Made Easy</p>
+                <h2>Learn Anything, From Anywhere, Anytime</h2>
+                <p class="desc">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+                    Distinctio delectus aliquid excepturi numquam itaque dignissimos nulla et commodi unde aut, 
+                    hic at aperiam quaerat nostrum labore error dolor soluta. 
+                    Nisi est a natus nulla dolore sint aspernatur nostrum, 
+                    numquam veritatis deserunt alias in aliquam placeat, beatae id perspiciatis sit. Natus?
+                </p>
+            </div>
+            <div class="right-div">
+                <img 
+                    src="../../../../assets/home_page_banner.svg" 
+                    alt="home_page_banner"
+                />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="featured-course-section">
+    <div class="section">
+        <h2>Featured Courses</h2>
+        <div class="grid-wrapper">
+            <div class="card shadow" *ngFor="let course of featuredCourses">
+                <div class="top-div">
+                    <img [src]="course.image" alt="" />
+                </div>
+                <div class="mid-div">
+                    <h3>{{ course.courseName }}</h3>
+                    <p class="desc">
+                        {{ course.description }}
+                    </p>
+                </div>
+                <div class="bottom-div">
+                    <div class="price">
+                        <p class="original-price" *ngIf="course.discount != 0">
+                            {{ course.courseFee }} BDT
+                        </p>
+                        <p>
+                            <strong>Price:</strong>
+                            {{
+                                course.courseFee - (course.courseFee * course.discount) / 100
+                            }}
+                            BDT
+                        </p>
+                    </div>
+                    <a 
+                        class="button"
+                        [routerLink]="['general/course-preview', course.courseId]"
+                    >
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="category-section">
+    <div class="section">
+        <h2>Browse By Category</h2>
+        <div class="category">
+            <h3>Programming</h3>
+            <div class="grid-wrapper">
+                <div class="item">
+                    <p>Java</p>
+                </div>
+                <div class="item">
+                    <p>Angular</p>
+                </div>
+                <div class="item">
+                    <p>React JS</p>
+                </div>
+                <div class="item">
+                    <p>Spring & Spring Boot</p>
+                </div>
+                <div class="item">
+                    <p>HTML & CSS</p>
+                </div>
+                <div class="item">
+                    <p>Bootstrap</p>
+                </div>
+            </div>
+        </div>
+        <div class="category">
+            <h3>Others</h3>
+            <div class="grid-wrapper">
+                <div class="item">
+                    <p>Business Studies</p>
+                </div>
+                <div class="item">
+                    <p>Math</p>
+                </div>
+                <div class="item">
+                    <p>General Studies</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
