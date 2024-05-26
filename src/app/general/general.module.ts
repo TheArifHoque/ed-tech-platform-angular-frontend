@@ -4,6 +4,7 @@ import { CallbackPageComponent } from './page/callback-page/callback-page.compon
 import { GeneralRoutingModule } from './general-routing.module';
 import { HomePageComponent } from './page/home-page/home-page.component';
 import { ProfilePageComponent } from './page/profile-page/profile-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ProfilePageComponent } from './page/profile-page/profile-page.component
   imports: [
     CommonModule,
     GeneralRoutingModule,
+    ReactiveFormsModule,
   ]
 })
 export class GeneralModule { }
