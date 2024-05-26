@@ -23,4 +23,30 @@ export class BackendApiService {
     callHomePageAPI(): Observable<any> {
         return this.httpClient.get(`${this.baseUrl}/home-page-api`);
     }
+
+    callUpdateUserDataAPI(userData: any): Observable<any> {
+        return this.httpClient.post(`${this.baseUrl}/profile-page-api`,userData);
+    }
+
+    callUpdateUserImageAPI(userId: string, image: File): Observable<any> {
+        const formData = new FormData();
+        formData.append('image', image);
+
+        const headers = new HttpHeaders();
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.append('Accept', 'application/json');
+
+        return this.httpClient.post(
+            `${this.baseUrl}/profile-page-api/image/${userId}`,
+            formData,
+            {headers: headers}
+        );
+    }
+
+    callUpdatePasswordAPI(userId: string, password: string): Observable<any> {
+        return this.httpClient.post(`${this.baseUrl}/profile-page-api/password`,{
+            userId: userId,
+            password: password,
+        });
+    }
 }
