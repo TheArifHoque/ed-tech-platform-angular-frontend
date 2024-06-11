@@ -1,0 +1,41 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { PopNotificationService } from '../../service/pop-notification.service';
+
+@Component({
+  selector: 'app-pop-notification',
+  templateUrl: './pop-notification.component.html',
+  styleUrl: './pop-notification.component.scss'
+})
+export class PopNotificationComponent implements OnInit, OnDestroy {
+  message: string;
+  type: 'success' | 'error';
+
+  isVisible: boolean;
+  subscription!: Subscription;
+
+  constructor(private popNotificationService: PopNotificationService) {
+    this.message = '';
+    this.type = 'success';
+    this.isVisible = false;
+  }
+
+  ngOnInit(): void {
+    this.subscription = this.popNotificationService
+      .getMessage()
+      .subscribe((notification) => {
+        this.message = notification.message;
+        this.type = notification.type;
+        if (this.message) {
+          this.isVisible = true;
+          setTimeout(() => {
+            this.isVisible = false;
+          }, 2000);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+}

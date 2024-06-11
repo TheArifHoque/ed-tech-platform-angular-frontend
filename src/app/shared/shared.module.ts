@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { RouterModule } from '@angular/router';
+import { PopNotificationComponent } from './component/pop-notification/pop-notification.component';
 
 
 
 @NgModule({
   declarations: [
     SidebarComponent,
-    FooterComponent
+    FooterComponent,
+    PopNotificationComponent
   ],
   imports: [
     CommonModule,
     RouterModule
   ],
-  exports: [SidebarComponent, FooterComponent]
+  exports: [SidebarComponent, FooterComponent, PopNotificationComponent]
 })
 export class SharedModule { }
