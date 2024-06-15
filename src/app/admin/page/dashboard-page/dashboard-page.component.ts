@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard-page.component.scss'
 })
 export class DashboardPageComponent {
-
+  constructor() {}
 }
