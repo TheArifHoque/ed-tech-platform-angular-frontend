@@ -24,6 +24,18 @@ export class BackendApiService {
         return this.httpClient.get(`${this.baseUrl}/home-page-api`);
     }
 
+    callGetCourseAPI(courseId: string): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/course-page-api/${courseId}`);
+    }
+
+    callCreateCourseAPI(courseData: any): Observable<any> {
+        return this.httpClient.post(`${this.baseUrl}/course-page-api`,courseData);
+    }
+
+    callUpdateCourseAPI(courseData: any): Observable<any> {
+        return this.httpClient.post(`${this.baseUrl}/course-page-api/update`,courseData);
+    }
+
     callUpdateUserDataAPI(userData: any): Observable<any> {
         return this.httpClient.post(`${this.baseUrl}/profile-page-api`,userData);
     }
