@@ -1,1 +1,55 @@
-<p>course-preview-page works!</p>
+<div class="top-banner-section">
+    <div class="section">
+      <div class="grid-wrapper" *ngIf="courseData">
+        <div class="left-div">
+          <img *ngIf="courseImage" [src]="courseImage" alt="" />
+        </div>
+        <div class="right-div">
+          <h2>{{ courseData.courseName }}</h2>
+          <p class="desc">
+            {{ courseData.description }}
+          </p>
+          <div class="info-section">
+            <div class="statistics">
+              <p><strong>Total Enrolled:</strong> --</p>
+            </div>
+            <div class="price">
+              <p class="original-price" *ngIf="courseData.discount != 0">
+                {{ courseData.courseFee }} BDT
+              </p>
+              <p>
+                <strong>Price:</strong>
+                {{
+                  courseData.courseFee -
+                    (courseData.courseFee * courseData.discount) / 100
+                }}
+                BDT
+              </p>
+            </div>
+          </div>
+          <button
+            class="button"
+            [routerLink]="['/user/purchase-course', courseData.courseId]"
+          >
+            Purchase Course
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div
+    class="course-content-section"
+    *ngIf="courseData && courseData.courseContents.length > 0"
+  >
+    <div class="section">
+      <h2>Course Contents</h2>
+      <hr />
+      <div *ngFor="let courseContent of courseData.courseContents">
+        <p>
+          <strong>Lecture No {{ courseContent.contentSequence }}:</strong>
+          {{ courseContent.contentTitle }}
+        </p>
+      </div>
+    </div>
+  </div>

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { CallbackPageComponent } from "./page/callback-page/callback-page.component";
 import { HomePageComponent } from "./page/home-page/home-page.component";
 import { ProfilePageComponent } from "./page/profile-page/profile-page.component";
+import { CoursePreviewPageComponent } from "./page/course-preview-page/course-preview-page.component";
 
 const routes: Routes = [
     {
@@ -21,6 +22,10 @@ const routes: Routes = [
     {
         path: 'profile',
         component: ProfilePageComponent,
+    },
+    {
+        path: 'course-preview/:courseId',
+        component: CoursePreviewPageComponent,
     },
 ]
 
