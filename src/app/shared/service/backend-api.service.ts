@@ -14,8 +14,8 @@ export class BackendApiService {
         return this.httpClient.get(`${this.baseUrl}/profile-page-api/${userId}`);
     }
 
-    callGetContentAPI(contentURL: string): Observable<any> {
-        return this.httpClient.get(`${this.baseUrl}/content-api/${contentURL}`, {
+    callGetContentAPI(contentUrl: string): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/content-api/${contentUrl}`, {
             responseType: 'arraybuffer',
         });
     }
@@ -41,6 +41,10 @@ export class BackendApiService {
 
     callGetCourseAPI(courseId: string): Observable<any> {
         return this.httpClient.get(`${this.baseUrl}/course-page-api/${courseId}`);
+    }
+
+    callGetCoursePreviewAPI(courseId: string): Observable<any> {
+        return this.httpClient.get(`${this.baseUrl}/course-page-api/${courseId}/preview`);
     }
 
     callCreateCourseAPI(courseData: any): Observable<any> {
