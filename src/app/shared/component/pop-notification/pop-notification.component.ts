@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { PopNotificationService } from '../../service/pop-notification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pop-notification',
   templateUrl: './pop-notification.component.html',
-  styleUrl: './pop-notification.component.scss'
+  styleUrls: ['./pop-notification.component.scss'],
 })
 export class PopNotificationComponent implements OnInit, OnDestroy {
   message: string;

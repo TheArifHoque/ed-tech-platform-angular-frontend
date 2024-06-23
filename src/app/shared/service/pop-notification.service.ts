@@ -1,26 +1,26 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class PopNotificationService {
-    private messageSubject = new BehaviorSubject<{
-        message: string;
-        type: 'success' | 'error';
-    }>({message: '', type: 'success'});
+  private messageSubject = new BehaviorSubject<{
+    message: string;
+    type: 'success' | 'error';
+  }>({ message: '', type: 'success' });
 
-    constructor(){}
+  constructor() {}
 
-    getMessage(): Observable<any> {
-        return this.messageSubject.asObservable();
-    }
+  getMessage(): Observable<any> {
+    return this.messageSubject.asObservable();
+  }
 
-    success(message: string): void {
-        this.messageSubject.next({ message, type: 'success' });
-    }
+  success(message: string): void {
+    this.messageSubject.next({ message, type: 'success' });
+  }
 
-    error(message: string): void {
-        this.messageSubject.next({ message, type: 'error' });
-    }
+  error(message: string): void {
+    this.messageSubject.next({ message, type: 'error' });
+  }
 }
