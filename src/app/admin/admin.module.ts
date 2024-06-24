@@ -6,13 +6,15 @@ import { DashboardPageComponent } from './page/dashboard-page/dashboard-page.com
 import { CourseDetailsPageComponent } from './page/course-details-page/course-details-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckPaymentsPageComponent } from './page/check-payments-page/check-payments-page.component';
+import { ManageCoursePageComponent } from './page/manage-course-page/manage-course-page.component';
 
 
 @NgModule({
   declarations: [
     DashboardPageComponent,
     CourseDetailsPageComponent,
-    CheckPaymentsPageComponent
+    CheckPaymentsPageComponent,
+    ManageCoursePageComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,50 @@
+<div class="manage-course-section">
+    <div class="section">
+      <h2>Course Management Panel</h2>
+      <div class="grid-wrapper">
+        <div class="card shadow" *ngFor="let course of courseList">
+          <div class="top-div">
+            <img [src]="course.image" alt="" />
+          </div>
+          <div class="mid-div">
+            <h3>{{ course.courseName }}</h3>
+            <p class="desc">
+              {{ course.description }}
+            </p>
+          </div>
+          <div class="bottom-div">
+            <div class="price">
+              <p class="original-price" *ngIf="course.discount != 0">
+                {{ course.courseFee }} BDT
+              </p>
+              <p>
+                <strong>Price:</strong>
+                {{
+                  course.courseFee - (course.courseFee * course.discount) / 100
+                }}
+                BDT
+              </p>
+            </div>
+            <button
+              class="button"
+              [routerLink]="['/admin/course-details', course.courseId]"
+            >
+              Manage Course
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="button-wrapper">
+        <button
+          class="button"
+          (click)="onPageChange(pageNumber - 1)"
+          [disabled]="pageNumber == 1"
+        >
+          Back
+        </button>
+        <button class="button" (click)="onPageChange(pageNumber + 1)">
+          Next
+        </button>
+      </div>
+    </div>
+</div>
