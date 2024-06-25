@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './manage-course-page.component.html',
   styleUrl: './manage-course-page.component.scss'
 })
-export class ManageCoursePageComponent {
+export class ManageCoursePageComponent implements OnInit {
   courseList: any[];
   pageNumber: number;
   limit: number;
@@ -23,6 +23,13 @@ export class ManageCoursePageComponent {
     this.courseList = [];
     this.pageNumber = 1;
     this.limit = 10;
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.pageNumber = +params['pageNumber'] || 1;
+      this.loadCourseData();
+    });
   }
 
   loadCourseData(): void {
