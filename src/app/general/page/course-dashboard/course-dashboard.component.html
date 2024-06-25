@@ -1,1 +1,44 @@
-<p>course-dashboard works!</p>
+<div class="top-banner-section">
+    <div class="section">
+      <div class="grid-wrapper" *ngIf="course">
+        <div class="left-div">
+          <img [src]="course.image" alt="" />
+        </div>
+        <div class="right-div">
+          <h2>{{ course.courseName }}</h2>
+          <p>{{ course.description }}</p>
+  
+          <!-- <div class="add-content">
+            <form [formGroup]="contentDataForm" (ngSubmit)="saveContentData()">
+              <div class="field">
+                <label for="courseName">Content Name</label>
+                <input type="text" id="courseName" formControlName="courseName" />
+              </div>
+            </form>
+  
+            <input
+              type="file"
+              accept="image/*"
+              (change)="onContentSelected($event)"
+              #fileInput
+            />
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="contents-section">
+    <div class="section">
+      <div class="grid-wrapper">
+        <div class="card shadow" *ngFor="let content of courseContents">
+          <div class="top-div">
+            <img [src]="course.image" alt="" />
+          </div>
+          <div class="bottom-div">
+            <p>{{ content.contentTitle }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
