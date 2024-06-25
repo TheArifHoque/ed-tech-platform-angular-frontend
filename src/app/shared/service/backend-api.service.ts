@@ -98,4 +98,17 @@ export class BackendApiService {
     callUpdatePaymentStatusAPI(paymentStatusMap: any): Observable<any> {
         return this.httpClient.post(`${this.baseUrl}/payment-api/approval`,paymentStatusMap);
     }
+
+    callEnrollToCourseAPI(courseEnrollmentInfo: any): Observable<any> {
+        return this.httpClient.post(
+            `${this.baseUrl}/course-page-api/enroll`,
+            courseEnrollmentInfo
+        );
+    }
+
+    callGetEnrolledCoursesAPI(userId: string): Observable<any> {
+        return this.httpClient.get(
+            `${this.baseUrl}/course-page-api/enrolled-courses?userId=${userId}`
+        );
+    }
 }
