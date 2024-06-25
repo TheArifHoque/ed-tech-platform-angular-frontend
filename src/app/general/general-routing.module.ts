@@ -4,6 +4,7 @@ import { CallbackPageComponent } from "./page/callback-page/callback-page.compon
 import { HomePageComponent } from "./page/home-page/home-page.component";
 import { ProfilePageComponent } from "./page/profile-page/profile-page.component";
 import { CoursePreviewPageComponent } from "./page/course-preview-page/course-preview-page.component";
+import { CourseDashboardComponent } from "./page/course-dashboard/course-dashboard.component";
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
         path: 'course-preview/:courseId',
         component: CoursePreviewPageComponent,
+    },
+    {
+        path: 'course-dashboard/:courseId',
+        component: CourseDashboardComponent,
     },
 ]
 
