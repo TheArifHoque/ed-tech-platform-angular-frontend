@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../shared/service/auth.service';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import { Observable, map } from 'rxjs';
   templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss'
 })
-export class DashboardPageComponent {
+export class DashboardPageComponent implements OnInit {
   enrolledCourses: any[];
 
   constructor(
@@ -18,6 +18,10 @@ export class DashboardPageComponent {
     private sanitizer: DomSanitizer
   ) {
     this.enrolledCourses = [];
+  }
+
+  ngOnInit(): void {
+    this.fetchEnrolledCourses();
   }
 
   fetchEnrolledCourses(): void {
