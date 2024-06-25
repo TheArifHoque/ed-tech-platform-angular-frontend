@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
 
   userMenu: MenuItem[] = [
     { label: 'Home', route: '/' },
-    { label: 'Learning Dashboard', route: '/' },
+    { label: 'Learning Dashboard', route: '/user/dashboard' },
     { label: 'Notification', route: '/' },
     { label: 'Manage Profile', route: '/' },
   ];

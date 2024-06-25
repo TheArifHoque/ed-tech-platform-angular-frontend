@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { UserRoutingModule } from './user-routing.module';
 import { CoursePurchasePageComponent } from './page/course-purchase-page/course-purchase-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DashboardPageComponent } from './page/dashboard-page/dashboard-page.component';
 
 
 @NgModule({
   declarations: [
-    CoursePurchasePageComponent
+    CoursePurchasePageComponent,
+    DashboardPageComponent
   ],
   imports: [
     CommonModule,
