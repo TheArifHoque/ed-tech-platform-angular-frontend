@@ -44,7 +44,7 @@ export class ProfilePageComponent implements OnInit {
         ],
         confirmPassword: ['', Validators.required],
       },
-      { Validators: [this.confirmPasswordValidator]},
+      { validators: [this.confirmPasswordValidator] },
     );
   }
 

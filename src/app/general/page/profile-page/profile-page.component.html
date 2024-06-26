@@ -148,7 +148,7 @@
                                 />
                                 <div
                                     *ngIf="
-                                        passwordDataForm.get('confirmPassword')?.invalid &&
+                                        passwordDataForm.invalid &&
                                         (passwordDataForm.get('confirmPassword')?.dirty ||
                                         passwordDataForm.get('confirmPassword')?.touched)"
                                 >
