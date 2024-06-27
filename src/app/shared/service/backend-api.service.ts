@@ -10,6 +10,13 @@ export class BackendApiService {
 
     constructor(private httpClient: HttpClient) {}
 
+    callUserRegistrationAPI(userData: any): Observable<any> {
+        return this.httpClient.post(
+          `${this.baseUrl}/user-management-api`,
+          userData
+        );
+      }
+
     callGetUserDataAPI(userId: string): Observable<any> {
         return this.httpClient.get(`${this.baseUrl}/profile-page-api/${userId}`);
     }
