@@ -5,6 +5,7 @@ import { HomePageComponent } from "./page/home-page/home-page.component";
 import { ProfilePageComponent } from "./page/profile-page/profile-page.component";
 import { CoursePreviewPageComponent } from "./page/course-preview-page/course-preview-page.component";
 import { CourseDashboardComponent } from "./page/course-dashboard/course-dashboard.component";
+import { RegistrationPageComponent } from "./page/registration-page/registration-page.component";
 
 const routes: Routes = [
     {
@@ -19,6 +20,10 @@ const routes: Routes = [
     {
         path: 'callback',
         component: CallbackPageComponent,
+    },
+    {
+        path: 'registration',
+        component: RegistrationPageComponent,
     },
     {
         path: 'profile',

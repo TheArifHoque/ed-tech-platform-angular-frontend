@@ -7,6 +7,7 @@ import { ProfilePageComponent } from './page/profile-page/profile-page.component
 import { ReactiveFormsModule } from '@angular/forms';
 import { CoursePreviewPageComponent } from './page/course-preview-page/course-preview-page.component';
 import { CourseDashboardComponent } from './page/course-dashboard/course-dashboard.component';
+import { RegistrationPageComponent } from './page/registration-page/registration-page.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CourseDashboardComponent } from './page/course-dashboard/course-dashboa
     HomePageComponent,
     ProfilePageComponent,
     CoursePreviewPageComponent,
-    CourseDashboardComponent
+    CourseDashboardComponent,
+    RegistrationPageComponent
   ],
   imports: [
     CommonModule,
