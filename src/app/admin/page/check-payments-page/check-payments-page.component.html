@@ -1,50 +1,50 @@
 <div class="payments-section">
-    <div class="section">
-      <h2>Payment Request Histories</h2>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>User Id</th>
-              <th>Course Id</th>
-              <th>Payment Vendor</th>
-              <th>Sender Account</th>
-              <th>Amount</th>
-              <th>Transaction Id</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let paymentInfo of paymentInfoList">
-              <td>{{ paymentInfo.userId }}</td>
-              <td>{{ paymentInfo.courseId }}</td>
-              <td>{{ paymentInfo.paymentVendor }}</td>
-              <td>{{ paymentInfo.senderAccount }}</td>
-              <td>{{ paymentInfo.amount }}</td>
-              <td>{{ paymentInfo.trxId }}</td>
-              <td>{{ paymentInfo.date }}</td>
-              <td>
-                <p *ngIf="paymentInfo.status == 'IN_REVIEW'">In Review</p>
-                <p *ngIf="paymentInfo.status == 'APPROVED'">Approved</p>
-                <p *ngIf="paymentInfo.status == 'DENIED'">Denied</p>
-              </td>
-              <td class="action">
-                <i
-                  class="fas fa-check success"
-                  (click)="updatePaymentStatus(paymentInfo.trxId, 'APPROVED')"
-                  *ngIf="!(paymentInfo.status === 'APPROVED')"
-                ></i>
-                <i
-                  class="fas fa-times failure"
-                  (click)="updatePaymentStatus(paymentInfo.trxId, 'DENIED')"
-                  *ngIf="paymentInfo.status === 'APPROVED'"
-                ></i>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="section">
+    <h2>Payment Request Histories</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>User Id</th>
+            <th>Course Id</th>
+            <th>Payment Vendor</th>
+            <th>Sender Account</th>
+            <th>Amount</th>
+            <th>Transaction Id</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let paymentInfo of paymentInfoList">
+            <td>{{ paymentInfo.userId }}</td>
+            <td>{{ paymentInfo.courseId }}</td>
+            <td>{{ paymentInfo.paymentVendor }}</td>
+            <td>{{ paymentInfo.senderAccount }}</td>
+            <td>{{ paymentInfo.amount }}</td>
+            <td>{{ paymentInfo.trxId }}</td>
+            <td>{{ paymentInfo.date }}</td>
+            <td>
+              <p *ngIf="paymentInfo.status == 'IN_REVIEW'">In Review</p>
+              <p *ngIf="paymentInfo.status == 'APPROVED'">Approved</p>
+              <p *ngIf="paymentInfo.status == 'DENIED'">Denied</p>
+            </td>
+            <td class="action">
+              <i
+                class="fas fa-check success"
+                (click)="updatePaymentStatus(paymentInfo.trxId, 'APPROVED')"
+                *ngIf="!(paymentInfo.status === 'APPROVED')"
+              ></i>
+              <i
+                class="fas fa-times failure"
+                (click)="updatePaymentStatus(paymentInfo.trxId, 'DENIED')"
+                *ngIf="paymentInfo.status === 'APPROVED'"
+              ></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>

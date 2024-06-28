@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
-import { ActivatedRoute } from '@angular/router';
-import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
   selector: 'app-course-preview-page',
   templateUrl: './course-preview-page.component.html',
-  styleUrl: './course-preview-page.component.scss'
+  styleUrls: ['./course-preview-page.component.scss'],
 })
 export class CoursePreviewPageComponent implements OnInit {
   courseData: any;

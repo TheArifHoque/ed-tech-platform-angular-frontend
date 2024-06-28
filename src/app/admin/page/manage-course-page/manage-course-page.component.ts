@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
 
 @Component({
   selector: 'app-manage-course-page',
   templateUrl: './manage-course-page.component.html',
-  styleUrl: './manage-course-page.component.scss'
+  styleUrls: ['./manage-course-page.component.scss'],
 })
 export class ManageCoursePageComponent implements OnInit {
   courseList: any[];
@@ -18,7 +18,7 @@ export class ManageCoursePageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private backendApiService: BackendApiService,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {
     this.courseList = [];
     this.pageNumber = 1;

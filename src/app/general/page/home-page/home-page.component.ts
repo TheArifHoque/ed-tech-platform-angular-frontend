@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, map } from 'rxjs';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.scss'
+  styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
   featuredCourses: any[] = [];

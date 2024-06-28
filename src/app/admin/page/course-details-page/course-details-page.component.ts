@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
-import { ActivatedRoute } from '@angular/router';
-import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, catchError, map } from 'rxjs';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
-  selector: 'app-course-details-page',
+  selector: 'course-details-page',
   templateUrl: './course-details-page.component.html',
-  styleUrl: './course-details-page.component.scss'
+  styleUrls: ['./course-details-page.component.scss'],
 })
 export class CourseDetailsPageComponent implements OnInit {
   courseId: string | null = null;
@@ -27,16 +27,16 @@ export class CourseDetailsPageComponent implements OnInit {
   ) {
     this.courseDataForm = this.formBuilder.group({
       courseName: ['', Validators.required],
-      description: ['',[Validators.required, Validators.maxLength(250)]],
+      description: ['', [Validators.required, Validators.maxLength(250)]],
       courseFee: [
         '',
-        [Validators.required, Validators.min(100),Validators.max(100000)]
+        [Validators.required, Validators.min(100), Validators.max(100000)],
       ],
       discount: [
         0,
-        [Validators.required, Validators.min(0), Validators.max(90)]
+        [Validators.required, Validators.min(0), Validators.max(90)],
       ],
-      isEnrollmentEnabled: ['', Validators.required]
+      isEnrollmentEnabled: ['', Validators.required],
     });
   }
 
@@ -57,6 +57,7 @@ export class CourseDetailsPageComponent implements OnInit {
           courseName: courseDetails.courseName,
           description: courseDetails.description,
           courseFee: courseDetails.courseFee,
+          discount: courseDetails.discount,
           isEnrollmentEnabled: courseDetails.isEnrollmentEnabled,
         });
         if (courseDetails.imageUrl) {
@@ -66,7 +67,7 @@ export class CourseDetailsPageComponent implements OnInit {
       },
       error: (error) => {
         this.popNotificationService.error(error.error.errorMessage);
-      }
+      },
     });
   }
 
@@ -100,14 +101,12 @@ export class CourseDetailsPageComponent implements OnInit {
       this.saveCourseImage().subscribe({
         next: (response) => {
           this.courseImageUrl = response;
-          this.updateCourse();
+          this.createNewCourse();
         },
         error: () => {
           this.popNotificationService.error('Choose a course image!');
         },
       });
-    } else {
-      this.updateCourse();
     }
   }
 
@@ -118,12 +117,14 @@ export class CourseDetailsPageComponent implements OnInit {
         this.saveCourseImage().subscribe({
           next: (response) => {
             this.courseImageUrl = response;
-            this.createNewCourse();
+            this.updateCourse();
           },
           error: () => {
             this.popNotificationService.error('Choose a course image!');
           },
         });
+      } else {
+        this.updateCourse();
       }
     }
   }
@@ -139,12 +140,13 @@ export class CourseDetailsPageComponent implements OnInit {
 
   saveCourseImage(): Observable<string> {
     return this.backendApiService
-      .callSaveContentAPI([this.courseImageFile])
+      .callSaveContentsAPI([this.courseImageFile])
       .pipe(
-        map((response) => 
+        map((response) =>
           response.responseBody.urlList &&
           response.responseBody.urlList.length > 0
-          ? response.responseBody.urlList[0] : ''
+            ? response.responseBody.urlList[0]
+            : ''
         ),
         catchError((error) => {
           throw new Error(error.error.errorMessage);

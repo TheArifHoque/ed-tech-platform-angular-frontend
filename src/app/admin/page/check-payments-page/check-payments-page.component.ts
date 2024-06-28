@@ -5,20 +5,20 @@ import { PopNotificationService } from '../../../shared/service/pop-notification
 @Component({
   selector: 'app-check-payments-page',
   templateUrl: './check-payments-page.component.html',
-  styleUrl: './check-payments-page.component.scss'
+  styleUrls: ['./check-payments-page.component.scss'],
 })
 export class CheckPaymentsPageComponent implements OnInit {
   paymentInfoList: any[];
 
   constructor(
     private backendApiService: BackendApiService,
-    private popNotificationService: PopNotificationService,
+    private popNotificationService: PopNotificationService
   ) {
     this.paymentInfoList = [];
   }
-  
+
   ngOnInit(): void {
-    this.backendApiService.callGetPaymentsAPI().subscribe({
+    this.backendApiService.callGetAllPaymentsAPI().subscribe({
       next: (response) => {
         this.paymentInfoList = response.responseBody.paymentInfoList;
       },

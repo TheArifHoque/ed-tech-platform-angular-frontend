@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../shared/service/auth.service';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
-import { ActivatedRoute } from '@angular/router';
-import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { AuthService } from '../../../shared/service/auth.service';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
   selector: 'app-course-purchase-page',
   templateUrl: './course-purchase-page.component.html',
-  styleUrl: './course-purchase-page.component.scss'
+  styleUrls: ['./course-purchase-page.component.scss'],
 })
 export class CoursePurchasePageComponent implements OnInit {
   courseData: any;
   courseImage: any;
-  paymentOption: any;
+  paymentOption: string;
   paymentData: any;
 
   constructor(
@@ -24,7 +24,7 @@ export class CoursePurchasePageComponent implements OnInit {
     private route: ActivatedRoute,
     private popNotificationService: PopNotificationService,
     private formBuilder: FormBuilder,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {
     this.paymentOption = '';
     this.paymentData = this.formBuilder.group({
@@ -39,7 +39,12 @@ export class CoursePurchasePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.route.params.subscribe((params) => {
+      const courseId = params['courseId'];
+      if (courseId) {
+        this.fetchCoursePreview(courseId);
+      }
+    });
   }
 
   fetchCoursePreview(courseId: any): void {
@@ -88,7 +93,7 @@ export class CoursePurchasePageComponent implements OnInit {
         },
         error: (error) => {
           this.popNotificationService.error(error.error.errorMessage);
-        }
+        },
       });
     }
   }

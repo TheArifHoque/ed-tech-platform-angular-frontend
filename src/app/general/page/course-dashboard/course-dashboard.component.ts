@@ -1,27 +1,37 @@
-import { Component } from '@angular/core';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
-import { ActivatedRoute } from '@angular/router';
-import { PopNotificationService } from '../../../shared/service/pop-notification.service';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
   selector: 'app-course-dashboard',
   templateUrl: './course-dashboard.component.html',
-  styleUrl: './course-dashboard.component.scss'
+  styleUrls: ['./course-dashboard.component.scss'],
 })
-export class CourseDashboardComponent {
+export class CourseDashboardComponent implements OnInit {
   courseId: string | null = null;
   course: any;
   courseContents: any[] = [];
   contentDataForm: any;
-  
+
   constructor(
     private backendApiService: BackendApiService,
     private route: ActivatedRoute,
     private popNotificationService: PopNotificationService,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.courseId = params['courseId'];
+      if (this.courseId) {
+        this.fetchCourseDetails(this.courseId);
+        this.fetchCourseContents(this.courseId);
+      }
+    });
+  }
 
   fetchCourseDetails(courseId: string): void {
     this.backendApiService.callGetCourseAPI(courseId).subscribe({
@@ -61,6 +71,13 @@ export class CourseDashboardComponent {
     return this.backendApiService
       .callGetContentAPI(imageUrl)
       .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
+  }
+
+  onContentSelected(event: any) {
+    const content = event.target.files[0];
+    if (content) {
+      console.log(content);
+    }
   }
 
   saveContentData(): void {}

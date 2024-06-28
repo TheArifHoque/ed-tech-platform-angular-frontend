@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardPageComponent } from './page/dashboard-page/dashboard-page.component';
+import { ManageCoursePageComponent } from './page/manage-course-page/manage-course-page.component';
 import { CourseDetailsPageComponent } from './page/course-details-page/course-details-page.component';
 import { CheckPaymentsPageComponent } from './page/check-payments-page/check-payments-page.component';
-import { ManageCoursePageComponent } from './page/manage-course-page/manage-course-page.component';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',
-    component: DashboardPageComponent
+    component: DashboardPageComponent,
   },
   {
     path: 'manage-course',
@@ -34,12 +34,14 @@ const routes: Routes = [
   {
     path: 'general',
     loadChildren: () =>
-      import('../general/general.module').then((module) => module.GeneralModule),
+      import('../general/general.module').then(
+        (module) => module.GeneralModule
+      ),
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}

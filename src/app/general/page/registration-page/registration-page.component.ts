@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../../shared/service/auth.service';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { PopNotificationService } from '../../../shared/service/pop-notification.service';
@@ -7,7 +13,7 @@ import { PopNotificationService } from '../../../shared/service/pop-notification
 @Component({
   selector: 'app-registration-page',
   templateUrl: './registration-page.component.html',
-  styleUrl: './registration-page.component.scss'
+  styleUrls: ['./registration-page.component.scss'],
 })
 export class RegistrationPageComponent {
   isRegistrationSuccessful: boolean;
@@ -17,28 +23,28 @@ export class RegistrationPageComponent {
     private authService: AuthService,
     private backendApiService: BackendApiService,
     private popNotificationService: PopNotificationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder
   ) {
     this.isRegistrationSuccessful = false;
-    this.userDataForm = this.formBuilder.group({
-
-      firstName: ['', [Validators.required, Validators.minLength(3)]],
-      lastName: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      gender: ['', Validators.required],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-          ),
+    this.userDataForm = this.formBuilder.group(
+      {
+        firstName: ['', [Validators.required, Validators.minLength(3)]],
+        lastName: ['', [Validators.required, Validators.minLength(3)]],
+        email: ['', [Validators.required, Validators.email]],
+        gender: ['', Validators.required],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern(
+              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+            ),
+          ],
         ],
-      ],
-      confirmPassword: ['', Validators.required],
-    },
-    { validators: [this.confirmPasswordValidator] }
-  );
+        confirmPassword: ['', Validators.required],
+      },
+      { validators: [this.confirmPasswordValidator] }
+    );
   }
 
   confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
@@ -47,6 +53,7 @@ export class RegistrationPageComponent {
       ? null
       : { mismatch: true };
   }
+
   registerUser(): void {
     this.markFormGroupTouched(this.userDataForm);
     if (this.userDataForm.valid) {

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../shared/service/auth.service';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, map } from 'rxjs';
+import { AuthService } from '../../../shared/service/auth.service';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
 
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
-  styleUrl: './dashboard-page.component.scss'
+  styleUrls: ['./dashboard-page.component.scss'],
 })
 export class DashboardPageComponent implements OnInit {
   enrolledCourses: any[];
@@ -26,13 +26,15 @@ export class DashboardPageComponent implements OnInit {
 
   fetchEnrolledCourses(): void {
     this.backendApiService
-      .callGetEnrolledCoursesAPI(this.authService.getUserId())
+      .callGetAllEnrolledCoursesAPI(this.authService.getUserId())
       .subscribe({
         next: (response) => {
           this.enrolledCourses = response.responseBody.courseList;
           this.loadImages();
         },
-        error: (error) => console.error(error),
+        error: (error) => {
+          console.error(error);
+        },
       });
   }
 

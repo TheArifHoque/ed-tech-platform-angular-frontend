@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { AuthService } from '../../../shared/service/auth.service';
-import { BackendApiService } from '../../../shared/service/backend-api.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, map } from 'rxjs';
+import { AuthService } from '../../../shared/service/auth.service';
+import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
-  styleUrl: './profile-page.component.scss'
+  styleUrls: ['./profile-page.component.scss'],
 })
 export class ProfilePageComponent implements OnInit {
   profileImage: any;
@@ -25,11 +31,11 @@ export class ProfilePageComponent implements OnInit {
   ) {
     this.profileDataForm = this.formBuilder.group({
       userId: [{ value: '', disabled: true }, Validators.required],
-      email: [{ value: '', disabled: true}, [Validators.required]],
+      email: [{ value: '', disabled: true }, [Validators.required]],
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
       gender: ['', Validators.required],
-      dateOfBirth: ['', Validators.required]
+      dateOfBirth: ['', Validators.required],
     });
     this.passwordDataForm = this.formBuilder.group(
       {
@@ -44,7 +50,7 @@ export class ProfilePageComponent implements OnInit {
         ],
         confirmPassword: ['', Validators.required],
       },
-      { validators: [this.confirmPasswordValidator] },
+      { validators: [this.confirmPasswordValidator] }
     );
   }
 
@@ -61,21 +67,21 @@ export class ProfilePageComponent implements OnInit {
 
   loadProfileData(): void {
     this.backendApiService
-    .callGetUserDataAPI(this.authService.getUserId())
-    .subscribe({
-      next: (response) => {
-        const userData = response?.responseBody?.user || [];
-        this.profileDataForm.patchValue(userData);
-        this.loadImage(userData.imageUrl);
-      },
-      error: (error) => console.error(error),
-    });
+      .callGetUserDataAPI(this.authService.getUserId())
+      .subscribe({
+        next: (response) => {
+          const userData = response?.responseBody?.user || [];
+          this.profileDataForm.patchValue(userData);
+          this.loadImage(userData.imageUrl);
+        },
+        error: (error) => console.error(error),
+      });
   }
 
   loadImage(imageUrl: string): void {
     this.getImage(imageUrl).subscribe({
-      next: (profileImage) => {
-        this.profileImage = this.sanitizer.bypassSecurityTrustUrl(profileImage);
+      next: (image) => {
+        this.profileImage = this.sanitizer.bypassSecurityTrustUrl(image);
       },
       error: (error) => console.error(error),
     });
@@ -83,8 +89,8 @@ export class ProfilePageComponent implements OnInit {
 
   getImage(imageUrl: string): Observable<string> {
     return this.backendApiService
-    .callGetContentAPI(imageUrl)
-    .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
+      .callGetContentAPI(imageUrl)
+      .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
   }
 
   updateProfileData(): void {
@@ -110,7 +116,7 @@ export class ProfilePageComponent implements OnInit {
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
       }
-    })
+    });
   }
 
   onImageSelected(event: any) {
@@ -143,7 +149,7 @@ export class ProfilePageComponent implements OnInit {
         },
         error: (error) => {
           this.popNotificationService.error(error.error.errorMessage);
-        }
+        },
       });
   }
 }
