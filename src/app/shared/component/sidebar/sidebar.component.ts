@@ -1,44 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
-import { MenuItem } from '../../model/menu-item';
 import { BackendApiService } from '../../service/backend-api.service';
-import { Observable, map } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
+import { CommonService } from '../../service/common.service';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  isLoggedIn: boolean;
-  showSidebar: boolean;
-  isAdmin: boolean;
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
+  showSidebar: boolean = false;
   userImage: any;
 
-  userMenu: MenuItem[] = [
-    { label: 'Home', route: '/' },
-    { label: 'Learning Dashboard', route: '/user/dashboard' },
-    { label: 'Notification', route: '/' },
-    { label: 'Manage Profile', route: '/' },
-  ];
-  adminMenu: MenuItem[] = [
-    { label: 'Home', route: '/' },
-    { label: 'Dashboard', route: '/admin/dashboard' },
-    { label: 'Profile', route: '/admin/general/profile' },
-    { label: 'Notification', route: '/admin/notification' },
-    { label: 'Payment Request', route: '/admin/payments' },
-    { label: 'Statistics', route: '/admin/statistics' },
-  ]
-
   constructor(
-    private authService: AuthService, 
-    private backendApiService: BackendApiService, 
-    private sanitizer: DomSanitizer) {
-    this.isLoggedIn = false;
-    this.showSidebar = false;
-    this.isAdmin = false;
-  }
+    private authService: AuthService,
+    private backendApiService: BackendApiService,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
     this.setLoginStatusAndLoadUserInfo();
@@ -51,51 +31,21 @@ export class SidebarComponent implements OnInit {
         this.isAdmin = this.authService.isAdmin();
         this.loadProfileData();
       }
-    })
+    });
   }
 
   loadProfileData(): void {
     this.backendApiService
-    .callGetUserDataAPI(this.authService.getUserId())
-    .subscribe({
-      next: (response) => {
-        const userData = response?.responseBody?.user || [];
-        this.loadImage(userData.imageUrl);
-      },
-      error: (error) => console.error(error),
-    });
+      .callGetUserByIdAPI(this.authService.getUserId())
+      .subscribe((response) => {
+        this.loadImage(response.responseBody.user.imageUrl);
+      });
   }
 
   loadImage(imageUrl: string): void {
-    this.getImage(imageUrl).subscribe({
-      next: (image) => {
-        this.userImage = this.sanitizer.bypassSecurityTrustUrl(image);
-      },
-      error: (error) => console.error(error),
+    this.commonService.getImageFromImageUrl(imageUrl).subscribe((safeUrl) => {
+      this.userImage = safeUrl;
     });
-  }
-
-  getImage(imageUrl: string): Observable<string> {
-    return this.backendApiService
-    .callGetContentAPI(imageUrl)
-    .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
-  }
-
-  getUserName(): string {
-    return this.authService.getUsername();
-  }
-
-  getActiveMenu(): MenuItem[] {
-    if (this.isLoggedIn && this.isAdmin) {
-      return this.adminMenu;
-    } else if (this.isLoggedIn) {
-      return this.userMenu;
-    }
-    return [];
-  }
-
-  toggleSidebar(): void {
-    this.showSidebar = !this.showSidebar;
   }
 
   login(): void {
@@ -104,5 +54,23 @@ export class SidebarComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  toggleSidebar(): void {
+    this.showSidebar = !this.showSidebar;
+  }
+
+  getActiveMenu(): any[] {
+    if (this.isLoggedIn && this.isAdmin) {
+      return this.commonService.getAdminMenu();
+    } else if (this.isLoggedIn) {
+      return this.commonService.getUserMenu();
+    } else {
+      return [];
+    }
+  }
+
+  getUserName(): string {
+    return this.authService.getUsername();
   }
 }

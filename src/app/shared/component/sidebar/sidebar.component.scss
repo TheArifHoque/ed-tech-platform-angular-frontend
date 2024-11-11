@@ -1,135 +1,146 @@
 @import "../../../../styles.scss";
 
+/* Navbar Styles */
 nav {
-    height: 50px;
-    width: 100%;
-    padding: 16px;
-    background-color: $primary;
-    color: white;
+  position: fixed;
+  z-index: 2;
+  height: 50px;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: $primary;
+  color: $white;
+
+  .branding {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    align-items: center;
+    column-gap: 24px;
 
-    .branding {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        column-gap: 12px;
-
-        i {
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        p {
-            font-size: 18px;
-        }
+    i {
+      font-size: 22px;
+      cursor: pointer;
     }
 
-    .user-info {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        column-gap: 12px;
+    p {
+      font-size: 18px;
 
-        .button {
-            background-color: white;
-            color: black;
-
-            &:hover {
-                background-color: $accent-1;
-            }
-        }
-
-        .button-outline {
-            color: white;
-            border: 1px solid $white;
-
-            &:hover {
-                background: none;
-                color: $accent-1;
-                border: 1px solid $accent-1;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            display: none;
-        }
+      &:hover {
+        color: $accent-1;
+        cursor: pointer;
+      }
     }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 12px;
+
+    .button {
+      background-color: $white;
+      color: $black;
+
+      &:hover {
+        background-color: $accent-1;
+      }
+    }
+
+    .button-outline {
+      color: $white;
+      border: 1px solid $white;
+
+      &:hover {
+        background: none;
+        color: $accent-1;
+        border: 1px solid $accent-1;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
 }
 
+/* Backdrop Styles */
 .backdrop {
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 1;
-    background-color: $white;
-    opacity: 0.05;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  background-color: $white;
+  opacity: 0.05;
 }
 
+/* Sidebar Styles */
 .sidebar {
-    background-color: $primary;
-    color: $white;
-    width: 275px;
-    min-height: calc(100vh - 50px);
-    position: fixed;
-    z-index: 2;
+  width: 275px;
+  min-height: calc(100vh - 50px);
+  position: fixed;
+  z-index: 2;
+  top: 50px;
+  background: $primary;
+  color: $white;
 
-    .wrapper {
-        .user-info {
-            margin-bottom: 12px;
-            padding: 24px 12px;
-            text-align: center;
-            border-bottom: 1px solid $accent-1;
+  .wrapper {
+    .user-info {
+      margin-bottom: 12px;
+      padding: 24px 12px;
+      text-align: center;
+      border-bottom: 1px solid $accent-1;
 
-            img {
-                width: 100%;
-                height: 100%;
-                max-width: 100px;
-                max-height: 100px;
-                margin-bottom: 16px;
-                background-color: $white;
-                border-radius: 50%;
-            }
+      img {
+        width: 100%;
+        height: 100%;
+        max-width: 100px;
+        max-height: 100px;
+        margin-bottom: 16px;
+        background-color: $white;
+        border-radius: 50%;
+      }
 
-            p {
-                color: $accent-1;
-                font-size: 18px;
-                letter-spacing: 1px;
-            }
-        }
-
-        .menu {
-            a {
-                padding: 12px;
-                display: block;
-
-                &:hover {
-                    background-color: $secondary;
-                    color: $accent-1;
-                    cursor: pointer;
-                }
-            }
-
-            .button {
-                background-color: $white;
-                color: $black;
-                height: 30px;
-                width: 80%;
-                margin: 20px auto;
-                display: block
-                ;
-                &:hover {
-                    background-color: $accent-1;
-                }
-            }
-    
-            .button-outline {
-                height: 30px;
-                width: 80%;
-                margin: 20px auto;
-                display: block;
-            }
-        }
+      p {
+        color: $accent-1;
+        font-size: 18px;
+        letter-spacing: 1px;
+      }
     }
+
+    .menu {
+      a {
+        padding: 12px;
+        display: block;
+
+        &:hover {
+          background-color: $secondary;
+          color: $accent-1;
+          cursor: pointer;
+        }
+      }
+
+      .button {
+        background-color: $white;
+        color: $black;
+        height: 30px;
+        width: 80%;
+        margin: 20px auto;
+        display: block;
+
+        &:hover {
+          background-color: $accent-1;
+        }
+      }
+
+      .button-outline {
+        height: 30px;
+        width: 80%;
+        margin: 20px auto;
+        display: block;
+      }
+    }
+  }
 }
