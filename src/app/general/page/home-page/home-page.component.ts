@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Observable, map } from 'rxjs';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { CommonService } from '../../../shared/service/common.service';
+import { PopNotificationService } from '../../../shared/service/pop-notification.service';
 
 @Component({
   selector: 'app-home-page',
@@ -10,40 +10,43 @@ import { BackendApiService } from '../../../shared/service/backend-api.service';
 })
 export class HomePageComponent implements OnInit {
   featuredCourses: any[] = [];
+  categories: string[] = [];
 
   constructor(
     private backendApiService: BackendApiService,
-    private sanitizer: DomSanitizer
+    private commonService: CommonService,
+    private popNotificationService: PopNotificationService
   ) {}
 
   ngOnInit(): void {
-    this.loadHomePageData();
+    this.getFeaturedCourses();
+    this.getCategories();
   }
 
-  loadHomePageData(): void {
-    this.backendApiService.callHomePageAPI().subscribe({
-      next: (response) => {
-        this.featuredCourses = response?.responseBody?.courseList || [];
-        this.loadImages();
-      },
-      error: (error) => console.error(error),
+  getFeaturedCourses(): void {
+    this.backendApiService.callGetAllCoursesAPI().subscribe((response) => {
+      this.featuredCourses = response.responseBody.courseList;
+      this.loadImages();
     });
   }
 
   loadImages(): void {
-    this.featuredCourses.forEach((course) => {
-      this.getImage(course.imageUrl).subscribe({
-        next: (image) => {
-          course.image = this.sanitizer.bypassSecurityTrustUrl(image);
-        },
-        error: (error) => console.error(error),
-      });
-    });
+    this.featuredCourses.forEach((course) =>
+      this.commonService
+        .getImageFromImageUrl(course.imageUrl)
+        .subscribe((safeUrl) => {
+          course.image = safeUrl;
+        })
+    );
   }
 
-  getImage(imageUrl: string): Observable<string> {
-    return this.backendApiService
-      .callGetContentAPI(imageUrl)
-      .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
+  getCategories(): void {
+    this.categories = this.commonService.getCategories();
+  }
+
+  getCoursesByCategory(category: string): void {
+    this.popNotificationService.setMessage(
+      'This functionality will be available soon!'
+    );
   }
 }
