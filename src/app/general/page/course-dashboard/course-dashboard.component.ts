@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
@@ -15,6 +15,7 @@ export class CourseDashboardComponent implements OnInit {
   course: any;
   courseContents: any[] = [];
   contentDataForm: any;
+  videoUrl: SafeUrl | undefined;
 
   constructor(
     private backendApiService: BackendApiService,
@@ -30,6 +31,7 @@ export class CourseDashboardComponent implements OnInit {
         this.fetchCourseDetails(this.courseId);
         this.fetchCourseContents(this.courseId);
       }
+      this.streamVideo();
     });
   }
 
@@ -42,7 +44,7 @@ export class CourseDashboardComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.popNotificationService.error(error.error.errorMessage);
+        this.popNotificationService.setMessage(error.error.errorMessage);
       },
     });
   }
@@ -53,7 +55,7 @@ export class CourseDashboardComponent implements OnInit {
         this.courseContents = response.responseBody.courseContents;
       },
       error: (error) => {
-        this.popNotificationService.error(error.error.errorMessage);
+        this.popNotificationService.setMessage(error.error.errorMessage);
       },
     });
   }
@@ -78,6 +80,20 @@ export class CourseDashboardComponent implements OnInit {
     if (content) {
       console.log(content);
     }
+  }
+
+  streamVideo(): void {
+    this.backendApiService
+      .callVideoStreamAPI('file-system-storage/dummy-video-1.mp4')
+      .subscribe({
+        next: (blob) => {
+          const url = URL.createObjectURL(blob);
+          this.videoUrl = this.sanitizer.bypassSecurityTrustUrl(url);
+        },
+        error: (error) => {
+          console.error('Error fetching video stream:', error);
+        },
+      });
   }
 
   saveContentData(): void {}
