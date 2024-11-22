@@ -67,7 +67,7 @@ export class ProfilePageComponent implements OnInit {
 
   loadProfileData(): void {
     this.backendApiService
-      .callGetUserDataAPI(this.authService.getUserId())
+      .callGetUserByIdAPI(this.authService.getUserId())
       .subscribe({
         next: (response) => {
           const userData = response?.responseBody?.user || [];
@@ -99,12 +99,12 @@ export class ProfilePageComponent implements OnInit {
       const userId = this.profileDataForm.get('userId')?.value;
       const email = this.profileDataForm.get('email')?.value;
       const formData = { ...this.profileDataForm.value, userId, email };
-      this.backendApiService.callUpdateUserDataAPI(formData).subscribe({
+      this.backendApiService.callUpdateProfileAPI(formData).subscribe({
         next: (response) => {
-          this.popNotificationService.success(response.responseBody.message);
+          this.popNotificationService.setMessage(response.responseBody.message);
         },
         error: (error) => {
-          this.popNotificationService.error(error.error.errorMessage);
+          this.popNotificationService.setMessage(error.error.errorMessage);
         },
       });
     }
@@ -123,15 +123,15 @@ export class ProfilePageComponent implements OnInit {
     const image: File = event.target.files[0];
     if (image) {
       const userId = this.authService.getUserId();
-      this.backendApiService.callUpdateUserImageAPI(userId, image).subscribe({
+      this.backendApiService.callUpdateImageUrlAPI(userId, image).subscribe({
         next: (response) => {
-          this.popNotificationService.success(response.responseBody.message);
+          this.popNotificationService.setMessage(response.responseBody.message);
           this.profileImage = this.sanitizer.bypassSecurityTrustUrl(
             URL.createObjectURL(image)
           );
         },
         error: (error) => {
-          this.popNotificationService.error(error.error.errorMessage);
+          this.popNotificationService.setMessage(error.error.errorMessage);
         },
       });
     }
@@ -145,10 +145,10 @@ export class ProfilePageComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.popNotificationService.success(response.responseBody.message);
+          this.popNotificationService.setMessage(response.responseBody.message);
         },
         error: (error) => {
-          this.popNotificationService.error(error.error.errorMessage);
+          this.popNotificationService.setMessage(error.error.errorMessage);
         },
       });
   }
