@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../../shared/service/auth.service';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { PopNotificationService } from '../../../shared/service/pop-notification.service';
+import { CommonService } from '../../../shared/service/common.service';
 
 @Component({
   selector: 'app-registration-page',
@@ -16,16 +15,17 @@ import { PopNotificationService } from '../../../shared/service/pop-notification
   styleUrls: ['./registration-page.component.scss'],
 })
 export class RegistrationPageComponent {
-  isRegistrationSuccessful: boolean;
+  passwordPattern: RegExp =
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
   userDataForm: FormGroup;
 
   constructor(
     private authService: AuthService,
     private backendApiService: BackendApiService,
+    private commonService: CommonService,
     private popNotificationService: PopNotificationService,
     private formBuilder: FormBuilder
   ) {
-    this.isRegistrationSuccessful = false;
     this.userDataForm = this.formBuilder.group(
       {
         firstName: ['', [Validators.required, Validators.minLength(3)]],
@@ -34,56 +34,37 @@ export class RegistrationPageComponent {
         gender: ['', Validators.required],
         password: [
           '',
-          [
-            Validators.required,
-            Validators.pattern(
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
-            ),
-          ],
+          [Validators.required, Validators.pattern(this.passwordPattern)],
         ],
         confirmPassword: ['', Validators.required],
       },
-      { validators: [this.confirmPasswordValidator] }
+      { validators: [this.commonService.confirmPasswordValidator] }
     );
-  }
-
-  confirmPasswordValidator(control: AbstractControl): ValidationErrors | null {
-    return !control.value.confirmPassword ||
-      control.value.password === control.value.confirmPassword
-      ? null
-      : { mismatch: true };
-  }
-
-  registerUser(): void {
-    this.markFormGroupTouched(this.userDataForm);
-    if (this.userDataForm.valid) {
-      this.backendApiService
-        .callUserRegistrationAPI(this.userDataForm.value)
-        .subscribe({
-          next: (response) => {
-            this.popNotificationService.setMessage(
-              response.responseBody.message
-            );
-            this.isRegistrationSuccessful = true;
-          },
-          error: (error) => {
-            this.popNotificationService.setMessage(error.error.errorMessage);
-            this.isRegistrationSuccessful = false;
-          },
-        });
-    }
-  }
-
-  markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach((control) => {
-      control.markAsTouched();
-      if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
-      }
-    });
   }
 
   login(): void {
     this.authService.login();
+  }
+
+  registerUser(): void {
+    this.commonService.markFormGroupTouched(this.userDataForm);
+    if (!this.userDataForm.valid) return;
+
+    this.backendApiService
+      .callUserRegistrationAPI(this.userDataForm.value)
+      .subscribe({
+        next: (response) => this.handleRegistrationSuccess(response),
+        error: (error) => this.handleRegistrationError(error),
+      });
+  }
+
+  private handleRegistrationSuccess(response: any): void {
+    const message = response.responseBody.message;
+    this.popNotificationService.setMessage(message);
+  }
+
+  private handleRegistrationError(response: any): void {
+    const message = response.error.errorBody.errorMessage;
+    this.popNotificationService.setMessage(message);
   }
 }
