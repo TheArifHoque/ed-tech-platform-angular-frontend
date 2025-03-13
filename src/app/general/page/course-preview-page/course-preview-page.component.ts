@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
 import { CommonService } from '../../../shared/service/common.service';
+import { AuthService } from '../../../shared/service/auth.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-course-preview-page',
@@ -11,9 +13,11 @@ import { CommonService } from '../../../shared/service/common.service';
 export class CoursePreviewPageComponent implements OnInit {
   courseData: any;
   contentsPreview: any[] = [];
+  enrollmentStatus?: string;
 
   constructor(
     private backendApiService: BackendApiService,
+    private authService: AuthService,
     private commonService: CommonService,
     private route: ActivatedRoute
   ) {}
@@ -23,19 +27,22 @@ export class CoursePreviewPageComponent implements OnInit {
       const courseId = params['courseId'];
       if (courseId) {
         this.fetchCourseData(courseId);
-        this.fetchCoursePreview(courseId);
+        this.fetchCourseContentPreview(courseId);
+        this.setEnrollmentStatus(courseId);
       }
     });
   }
 
-  fetchCourseData(courseId: string) {
-    this.backendApiService.callGetCourseAPI(courseId).subscribe((response) => {
-      this.courseData = response.responseBody.course;
-      this.loadImage();
-    });
+  private fetchCourseData(courseId: string) {
+    this.backendApiService
+      .callGetCourseByIdAPI(courseId)
+      .subscribe((response) => {
+        this.courseData = response.responseBody.course;
+        this.loadImage();
+      });
   }
 
-  loadImage(): void {
+  private loadImage(): void {
     this.commonService
       .getImageFromImageUrl(this.courseData.imageUrl)
       .subscribe((safeUrl) => {
@@ -43,11 +50,24 @@ export class CoursePreviewPageComponent implements OnInit {
       });
   }
 
-  fetchCoursePreview(courseId: any): void {
+  private fetchCourseContentPreview(courseId: any): void {
     this.backendApiService
-      .callGetCoursePreviewAPI(courseId)
+      .callGetCourseContentPreviewAPI(courseId)
       .subscribe((response) => {
         this.contentsPreview = response.responseBody.courseContentsPreview;
       });
+  }
+
+  private setEnrollmentStatus(courseId: string): void {
+    const userId = this.authService.getUserId();
+
+    if (userId) {
+      this.backendApiService
+        .callGetEnrollmentStatusAPI(courseId, userId)
+        .pipe(catchError(() => of(null)))
+        .subscribe((response) => {
+          this.enrollmentStatus = response?.responseBody.status;
+        });
+    }
   }
 }
