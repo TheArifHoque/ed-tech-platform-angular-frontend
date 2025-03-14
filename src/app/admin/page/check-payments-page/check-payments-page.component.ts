@@ -8,40 +8,39 @@ import { PopNotificationService } from '../../../shared/service/pop-notification
   styleUrls: ['./check-payments-page.component.scss'],
 })
 export class CheckPaymentsPageComponent implements OnInit {
-  paymentInfoList: any[];
+  paymentInfoList: any[] = [];
 
   constructor(
     private backendApiService: BackendApiService,
     private popNotificationService: PopNotificationService
-  ) {
-    this.paymentInfoList = [];
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.backendApiService.callGetAllPaymentsAPI().subscribe({
-      next: (response) => {
-        this.paymentInfoList = response.responseBody.paymentInfoList;
-      },
-      error: (error) => {
-        console.error(error);
-      },
+    this.backendApiService.callGetAllPaymentInfoAPI().subscribe((response) => {
+      this.paymentInfoList = response.responseBody.paymentInfoList;
     });
   }
 
-  updatePaymentStatus(trxId: string, status: string): void {
-    const paymentStatusMap = { trxId, status };
+  updatePaymentStatus(paymentInfo: any, status: string): void {
+    const paymentInfoData = { ...paymentInfo, status };
     this.backendApiService
-      .callUpdatePaymentStatusAPI(paymentStatusMap)
+      .callUpdatePaymentStatusAPI(paymentInfoData)
       .subscribe({
         next: (response) => {
-          this.popNotificationService.setMessage(response.responseBody.message);
-          this.paymentInfoList.find(
-            (paymentInfo) => paymentInfo.trxId === trxId
-          ).status = status;
+          paymentInfo.status = status;
+          this.handleSuccessResponse(response);
         },
-        error: (error) => {
-          this.popNotificationService.setMessage(error.error.errorMessage);
-        },
+        error: (error) => this.handleErrorResponse(error),
       });
+  }
+
+  private handleSuccessResponse(response: any): void {
+    const message = response.responseBody.message;
+    this.popNotificationService.setMessage(message);
+  }
+
+  private handleErrorResponse(response: any): void {
+    const message = response.error.errorBody.errorMessage;
+    this.popNotificationService.setMessage(message);
   }
 }
