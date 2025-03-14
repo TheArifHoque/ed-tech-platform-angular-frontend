@@ -8,6 +8,7 @@ import {
   OAuthSuccessEvent,
 } from 'angular-oauth2-oidc';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { BackendApiService } from './backend-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AuthService {
   private loggedInStatus = new BehaviorSubject<boolean>(false);
 
-  constructor(private oauthService: OAuthService, private router: Router) {
+  constructor(
+    private oauthService: OAuthService,
+    private backendApiService: BackendApiService,
+    private router: Router
+  ) {
     this.configure();
     this.setIsLoggedInStatus();
   }
@@ -39,7 +44,12 @@ export class AuthService {
     showDebugInformation: true,
   };
 
-  public login() {
+  public login(redirectUrl?: string) {
+    if (redirectUrl) {
+      sessionStorage.setItem('redirectUrl', redirectUrl);
+    } else {
+      sessionStorage.removeItem('redirectUrl');
+    }
     this.oauthService.initCodeFlow();
   }
 
@@ -53,16 +63,28 @@ export class AuthService {
         event instanceof OAuthSuccessEvent &&
         event.type === 'token_received'
       ) {
+        this.initUser();
         this.setIsLoggedInStatus();
         if (this.isAdmin()) {
           this.router.navigate(['/admin']);
         } else if (this.isUser()) {
-          this.router.navigate(['/common/home']);
+          const redirectUrl = sessionStorage.getItem('redirectUrl') ?? '';
+          sessionStorage.removeItem('redirectUrl');
+          this.router.navigateByUrl(redirectUrl);
         }
       } else if (event instanceof OAuthErrorEvent) {
         console.error(event);
       }
     });
+  }
+
+  private initUser(): void {
+    const userId = this.getUserId();
+    const email = this.getEmail();
+    const firstName = this.getFirstName();
+    const lastName = this.getLastName();
+    const userData = { userId, email, firstName, lastName };
+    this.backendApiService.callInitUserAPI(userData).subscribe();
   }
 
   private setIsLoggedInStatus(): void {
@@ -76,18 +98,21 @@ export class AuthService {
   }
 
   public isAdmin(): boolean {
-    return this.getClaims().includes('ADMIN') ? true : false;
+    return this.getRoles().includes('ADMIN') ? true : false;
   }
 
   public isUser(): boolean {
-    return this.getClaims().includes('USER') ? true : false;
+    return this.getRoles().includes('USER') ? true : false;
   }
 
-  public getClaims(): string[] {
+  public getRoles(): string[] {
     const accessToken: string = this.oauthService.getAccessToken();
-    const splittedToken: string[] = accessToken.split('.');
-    const claims = JSON.parse(atob(splittedToken[1]));
-    return claims.realm_access.roles;
+    if (accessToken) {
+      const splittedToken: string[] = accessToken.split('.');
+      const claims = JSON.parse(atob(splittedToken[1]));
+      return claims.realm_access.roles;
+    }
+    return [];
   }
 
   public getUserId(): string {
@@ -95,9 +120,23 @@ export class AuthService {
     return claims ? claims.sub : '';
   }
 
-  public getUsername(): string {
+  public getEmail(): string {
     let claims: any = this.oauthService.getIdentityClaims();
-    return claims ? `${claims.given_name} ${claims.family_name}` : '';
+    return claims ? claims.preferred_username : '';
+  }
+
+  public getFullname(): string {
+    return `${this.getFirstName()} ${this.getLastName()}`;
+  }
+
+  public getFirstName(): string {
+    let claims: any = this.oauthService.getIdentityClaims();
+    return claims ? claims.given_name : '';
+  }
+
+  public getLastName(): string {
+    let claims: any = this.oauthService.getIdentityClaims();
+    return claims ? claims.family_name : '';
   }
 
   public getIdToken(): string {
