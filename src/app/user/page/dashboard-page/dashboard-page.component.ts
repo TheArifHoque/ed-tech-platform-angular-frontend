@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Observable, map } from 'rxjs';
 import { AuthService } from '../../../shared/service/auth.service';
 import { BackendApiService } from '../../../shared/service/backend-api.service';
+import { CommonService } from '../../../shared/service/common.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -10,48 +9,40 @@ import { BackendApiService } from '../../../shared/service/backend-api.service';
   styleUrls: ['./dashboard-page.component.scss'],
 })
 export class DashboardPageComponent implements OnInit {
-  enrolledCourses: any[];
+  userId!: string;
+  enrolledCourses: any[] = [];
 
   constructor(
     private authService: AuthService,
     private backendApiService: BackendApiService,
-    private sanitizer: DomSanitizer
-  ) {
-    this.enrolledCourses = [];
-  }
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
-    this.fetchEnrolledCourses();
+    this.userId = this.authService.getUserId();
+    this.getEnrolledCourses();
   }
 
-  fetchEnrolledCourses(): void {
+  private getEnrolledCourses(): void {
     this.backendApiService
-      .callGetAllEnrolledCoursesAPI(this.authService.getUserId())
-      .subscribe({
-        next: (response) => {
-          this.enrolledCourses = response.responseBody.courseList;
-          this.loadImages();
-        },
-        error: (error) => {
-          console.error(error);
-        },
+      .callGetAllEnrolledCoursesAPI(this.userId)
+      .subscribe((response) => {
+        this.enrolledCourses = response.responseBody.enrolledCourseList;
+        this.loadImages();
       });
   }
 
-  loadImages(): void {
-    this.enrolledCourses.forEach((course) => {
-      this.getImage(course.imageUrl).subscribe({
-        next: (image) => {
-          course.image = this.sanitizer.bypassSecurityTrustUrl(image);
-        },
-        error: (error) => console.error(error),
-      });
-    });
+  private loadImages(): void {
+    this.enrolledCourses.forEach((course) =>
+      this.commonService
+        .getImageFromImageUrl(course.imageUrl)
+        .subscribe((safeUrl) => {
+          course.image = safeUrl;
+        })
+    );
   }
 
-  getImage(imageUrl: string): Observable<string> {
-    return this.backendApiService
-      .callGetContentAPI(imageUrl)
-      .pipe(map((response) => URL.createObjectURL(new Blob([response]))));
+  getFullname(): string {
+    return this.authService.getFullname();
   }
 }
