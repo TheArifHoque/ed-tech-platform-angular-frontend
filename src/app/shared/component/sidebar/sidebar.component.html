@@ -1,33 +1,33 @@
 <!-- Navbar Starts -->
 <nav>
-    <div class="branding">
-        <i
-          class="fas"
-          [ngClass]="{ 'fa-bars': !showSidebar, 'fa-times': showSidebar }"
-          (click)="toggleSidebar()"
-        >
-        </i>
-        <p [routerLink]="['/']">Dev Academy BD</p>
-    </div>
+  <div class="branding">
+    <i
+      class="fas"
+      [ngClass]="{ 'fa-bars': !showSidebar, 'fa-times': showSidebar }"
+      (click)="toggleSidebar()"
+    >
+    </i>
+    <p [routerLink]="['/']">Dev Academy BD</p>
+  </div>
 
-    <div *ngIf="isLoggedIn; else notLoggedInNavbar">
-        <div class="user-info">
-            <p>{{ getUserName() }}</p>
-            <button class="button-outline" (click)="logout()">Logout</button>
-        </div>
+  <div *ngIf="isLoggedIn; else notLoggedInNavbar">
+    <div class="user-info">
+      <p>{{ getFullname() }}</p>
+      <button class="button-outline" (click)="logout()">Logout</button>
     </div>
+  </div>
 
-    <ng-template #notLoggedInNavbar>
-        <div class="user-info">
-            <button
-              class="button button-sign-up"
-              [routerLink]="['/general/registration']"
-            >
-              Sign Up
-            </button>
-            <button class="button" (click)="login()">Login</button>
-        </div>
-    </ng-template>
+  <ng-template #notLoggedInNavbar>
+    <div class="user-info">
+      <button
+        class="button button-sign-up"
+        [routerLink]="['/general/registration']"
+      >
+        Sign Up
+      </button>
+      <button class="button" (click)="login()">Login</button>
+    </div>
+  </ng-template>
 </nav>
 <!-- Navbar Ends -->
 
@@ -41,25 +41,25 @@
 
 <!-- Sidebar Starts -->
 <div class="sidebar" [ngClass]="{ hidden: !showSidebar }">
-    <div class="logo">
-        <img
-          src="../../../../assets/image/home_page_banner.svg"
-          alt="Dev Academy BD Logo"
-        />
-    </div>
+  <div class="logo">
+    <img
+      src="../../../../assets/image/home_page_banner.svg"
+      alt="Dev Academy BD Logo"
+    />
+  </div>
 
-    <div *ngIf="isLoggedIn; else notLoggedInSidebar">
-        <div class="menu" (click)="toggleSidebar()">
-          <a *ngFor="let menuItem of getActiveMenu()" [routerLink]="menuItem.route">
-            <i [ngClass]="menuItem.logo"></i>
-            {{ menuItem.label }}
-          </a>
-        </div>
-        <button class="button" (click)="logout()">Logout</button>
+  <div *ngIf="isLoggedIn; else notLoggedInSidebar">
+    <div class="menu" (click)="toggleSidebar()">
+      <a *ngFor="let menuItem of getActiveMenu()" [routerLink]="menuItem.route">
+        <i [ngClass]="menuItem.logo"></i>
+        {{ menuItem.label }}
+      </a>
     </div>
+    <button class="button" (click)="logout()">Logout</button>
+  </div>
 
-    <ng-template #notLoggedInSidebar>
-        <button class="button" (click)="login()">Login</button>
-    </ng-template>
+  <ng-template #notLoggedInSidebar>
+    <button class="button" (click)="login()">Login</button>
+  </ng-template>
 </div>
 <!-- Sidebar Ends -->
