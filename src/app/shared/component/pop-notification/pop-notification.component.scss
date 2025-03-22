@@ -20,6 +20,9 @@
   padding: 20px;
   width: 300px;
   background-color: $white;
+  word-wrap: break-word;  
+  overflow-wrap: break-word; 
+  white-space: normal;
 
   p {
     line-height: 24px;
